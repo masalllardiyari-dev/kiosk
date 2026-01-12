@@ -2,10 +2,11 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { FeedbackData, GeminiResponse } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 export const processFeedback = async (data: FeedbackData): Promise<GeminiResponse> => {
   try {
+    // Client initialization moved inside for deployment safety
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: `Bir kullanıcı Üsküdar Üniversitesi Teksifre kioskunda şu geri bildirimi bıraktı:
