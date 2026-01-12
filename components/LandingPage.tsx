@@ -5,156 +5,113 @@ interface LandingPageProps {
   onSelect: (url: string) => void;
 }
 
-type Role = 'student' | 'staff' | null;
 type Lang = 'TR' | 'EN';
 
 const BASE_URL = 'https://teksifre.uskudar.edu.tr';
 
 const LandingPage: React.FC<LandingPageProps> = ({ onSelect }) => {
-  const [role, setRole] = useState<Role>(null);
   const [lang, setLang] = useState<Lang>('TR');
 
-  const studentOptions = [
-    { 
-      label: lang === 'TR' ? 'Öğrenci E-Posta Şifresini Sıfırlama' : 'Reset Student Email Password', 
-      description: lang === 'TR' ? 'Mail şifrenizi sıfırlamak için dokunun.' : 'Tap to reset your mail password.',
-      url: `${BASE_URL}/Home/Student`,
-      icon: 'fa-book-open',
-      iconBg: 'bg-indigo-100',
-      iconColor: 'text-indigo-600'
-    },
-    { 
-      label: lang === 'TR' ? 'E-Posta Adresimi Öğren' : 'Find My Email', 
-      description: lang === 'TR' ? 'Öğrenci numaranız ile adresinizi bulun.' : 'Find your address with student number.',
-      url: `${BASE_URL}/Home/FindEmail`,
-      icon: 'fa-envelope-open-text',
-      iconBg: 'bg-blue-100',
-      iconColor: 'text-blue-600'
-    },
-    { 
-      label: lang === 'TR' ? 'MFA Sıfırlama' : 'MFA Reset', 
-      description: lang === 'TR' ? 'İki aşamalı doğrulamayı sıfırlayın.' : 'Reset two-factor authentication.',
-      url: `${BASE_URL}/Home/MFAReset`,
-      icon: 'fa-shield-halved',
-      iconBg: 'bg-purple-100',
-      iconColor: 'text-purple-600'
-    },
-  ];
-
-  const staffOptions = [
-    { 
-      label: lang === 'TR' ? 'Personel Şifre Sıfırlama' : 'Reset Staff Password', 
-      description: lang === 'TR' ? 'Personel mail şifrenizi sıfırlayın.' : 'Reset your staff email password.',
-      url: `${BASE_URL}/Home/Staff`,
-      icon: 'fa-briefcase',
-      iconBg: 'bg-green-100',
-      iconColor: 'text-green-600'
-    },
-  ];
+  const handleEntry = () => {
+    onSelect(BASE_URL);
+  };
 
   return (
-    <div className={`fixed inset-0 flex flex-col items-center justify-center z-50 transition-colors duration-500 ${role ? 'bg-gray-100' : 'bg-[#2b59c3]'}`}>
+    <div className="fixed inset-0 flex flex-col items-center justify-center z-50 bg-[#003366] transition-all duration-700 overflow-hidden">
       
-      {/* Background Icon */}
-      {!role && (
-        <div className="absolute inset-0 opacity-10 flex items-center justify-center pointer-events-none">
-          <i className="fa-solid fa-shield-halved text-[600px] text-white"></i>
+      {/* Dynamic Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-blue-500/20 rounded-full blur-[120px]"></div>
+        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-yellow-500/10 rounded-full blur-[120px]"></div>
+        <div className="absolute inset-0 opacity-[0.03] flex items-center justify-center">
+          <i className="fa-solid fa-building-columns text-[900px] text-white"></i>
         </div>
-      )}
+      </div>
 
-      {/* Language Switcher */}
-      <div className="absolute top-10 left-10 right-10 flex justify-between items-center z-[60]">
-        {role ? (
-          <button 
-            onClick={() => setRole(null)}
-            className="w-24 h-24 bg-white rounded-3xl flex items-center justify-center text-5xl text-[#2b59c3] shadow-2xl active:scale-90"
-          >
-            <i className="fa-solid fa-arrow-left"></i>
-          </button>
-        ) : <div className="w-24" />}
-
-        <div className={`flex p-2 rounded-3xl backdrop-blur-md border ${role ? 'bg-white/50 border-gray-300' : 'bg-white/10 border-white/20'}`}>
+      {/* Language Toggle - Premium Glass Style */}
+      <div className="absolute top-12 right-12 z-[60]">
+        <div className="flex p-1.5 rounded-[2rem] bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl">
           <button 
             onClick={() => setLang('TR')}
-            className={`px-10 py-4 rounded-2xl text-2xl font-black ${lang === 'TR' ? 'bg-white text-[#2b59c3] shadow-lg' : (role ? 'text-gray-500' : 'text-white')}`}
+            className={`px-12 py-4 rounded-[1.5rem] text-xl font-black transition-all duration-300 ${lang === 'TR' ? 'bg-[#FFCC00] text-[#003366] shadow-[0_0_30px_rgba(255,204,0,0.4)] scale-105' : 'text-white/40 hover:text-white/80'}`}
           >
             TR
           </button>
           <button 
             onClick={() => setLang('EN')}
-            className={`px-10 py-4 rounded-2xl text-2xl font-black ${lang === 'EN' ? 'bg-white text-[#2b59c3] shadow-lg' : (role ? 'text-gray-500' : 'text-white')}`}
+            className={`px-12 py-4 rounded-[1.5rem] text-xl font-black transition-all duration-300 ${lang === 'EN' ? 'bg-[#FFCC00] text-[#003366] shadow-[0_0_30px_rgba(255,204,0,0.4)] scale-105' : 'text-white/40 hover:text-white/80'}`}
           >
             EN
           </button>
         </div>
       </div>
 
-      <div className="w-full max-w-7xl px-12">
-        {!role ? (
-          <div className="text-center space-y-20">
-            <div className="space-y-6">
-              <h1 className="text-9xl font-black text-white tracking-tight leading-none drop-shadow-xl">
-                {lang === 'TR' ? 'Kimsiniz?' : 'Welcome'}
-              </h1>
-              <p className="text-4xl text-white/80 font-bold uppercase tracking-widest">
-                {lang === 'TR' ? 'Giriş türünü seçiniz' : 'Select your entry type'}
-              </p>
-            </div>
-
-            <div className="flex flex-row gap-12 justify-center">
-              <button 
-                onClick={() => setRole('student')}
-                className="w-full max-w-md aspect-square bg-white/10 border-4 border-white/30 rounded-[5rem] flex flex-col items-center justify-center gap-8 hover:bg-white/20 active:scale-95 shadow-2xl backdrop-blur-sm transition-all"
-              >
-                <i className="fa-solid fa-user-graduate text-[150px] text-white"></i>
-                <span className="text-6xl font-black text-white uppercase">{lang === 'TR' ? 'Öğrenci' : 'Student'}</span>
-              </button>
-
-              <button 
-                onClick={() => setRole('staff')}
-                className="w-full max-w-md aspect-square bg-white/10 border-4 border-white/30 rounded-[5rem] flex flex-col items-center justify-center gap-8 hover:bg-white/20 active:scale-95 shadow-2xl backdrop-blur-sm transition-all"
-              >
-                <i className="fa-solid fa-user-tie text-[150px] text-white"></i>
-                <span className="text-6xl font-black text-white uppercase">{lang === 'TR' ? 'Personel' : 'Staff'}</span>
-              </button>
-            </div>
+      <div className="w-full max-w-7xl px-12 text-center space-y-24 relative z-10">
+        {/* Brand Header */}
+        <div className="space-y-8">
+          <div className="inline-flex items-center gap-4 bg-white/5 px-8 py-3 rounded-full backdrop-blur-md border border-white/10 mb-4">
+             <div className="w-3 h-3 bg-[#FFCC00] rounded-full animate-pulse"></div>
+             <p className="text-white/80 text-xl font-bold tracking-[0.5em] uppercase">
+               Üsküdar University
+             </p>
           </div>
-        ) : (
-          <div className="space-y-12">
+          <h1 className="text-[140px] font-black text-white leading-none tracking-tighter drop-shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
+            {lang === 'TR' ? 'TEKSİFRE' : 'PASSPORT'}
+          </h1>
+          <p className="text-3xl text-white/60 font-medium tracking-[0.2em] uppercase max-w-3xl mx-auto leading-relaxed">
+            {lang === 'TR' ? 'Güvenli Şifre Yönetim Sistemi' : 'Secure Password Management System'}
+          </p>
+        </div>
+
+        {/* Selection Cards */}
+        <div className="flex flex-row gap-16 justify-center">
+          {/* Student Card */}
+          <button 
+            onClick={handleEntry}
+            className="group relative w-full max-w-md aspect-[4/5] bg-white/[0.03] backdrop-blur-2xl rounded-[5rem] flex flex-col items-center justify-center gap-14 hover:bg-white/[0.07] active:scale-95 border border-white/10 transition-all duration-500 shadow-2xl overflow-hidden"
+          >
+            <div className="absolute top-0 left-0 w-full h-2 bg-[#FFCC00]/50 group-hover:h-4 transition-all"></div>
+            <div className="w-64 h-64 bg-gradient-to-br from-blue-500/20 to-blue-600/5 rounded-[3rem] flex items-center justify-center group-hover:scale-110 transition-transform duration-500 border border-white/5">
+              <i className="fa-solid fa-graduation-cap text-[140px] text-blue-400 group-hover:text-blue-300 drop-shadow-[0_10px_30px_rgba(96,165,250,0.4)]"></i>
+            </div>
             <div className="text-center space-y-4">
-              <h2 className="text-7xl font-black text-[#003366]">
-                {role === 'student' ? (lang === 'TR' ? 'Öğrenci' : 'Student') : (lang === 'TR' ? 'Personel' : 'Staff')}
-              </h2>
-              <p className="text-3xl text-gray-400 font-bold tracking-widest uppercase">
-                {lang === 'TR' ? 'Yapmak istediğiniz işlemi seçin' : 'Select a procedure'}
-              </p>
+              <span className="text-7xl font-black text-white uppercase block tracking-tight">
+                {lang === 'TR' ? 'ÖĞRENCİ' : 'STUDENT'}
+              </span>
+              <span className="text-2xl text-white/40 font-bold tracking-[0.3em] uppercase group-hover:text-[#FFCC00] transition-colors">
+                {lang === 'TR' ? 'Giriş Yap' : 'Login'}
+              </span>
             </div>
+          </button>
 
-            <div className="grid grid-cols-1 gap-6 max-w-4xl mx-auto">
-              {(role === 'student' ? studentOptions : staffOptions).map((opt, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => onSelect(opt.url)}
-                  className="bg-white p-10 rounded-[3.5rem] flex items-center gap-10 shadow-xl border-2 border-transparent active:scale-95 transition-all text-left"
-                >
-                  <div className={`w-28 h-28 ${opt.iconBg} ${opt.iconColor} rounded-[2rem] flex items-center justify-center text-5xl shadow-md`}>
-                    <i className={`fa-solid ${opt.icon}`}></i>
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-4xl font-black text-[#003366]">{opt.label}</h3>
-                    <p className="text-2xl text-gray-400 font-medium">{opt.description}</p>
-                  </div>
-                  <i className="fa-solid fa-chevron-right text-4xl text-gray-200 pr-4"></i>
-                </button>
-              ))}
+          {/* Staff Card */}
+          <button 
+            onClick={handleEntry}
+            className="group relative w-full max-w-md aspect-[4/5] bg-white/[0.03] backdrop-blur-2xl rounded-[5rem] flex flex-col items-center justify-center gap-14 hover:bg-white/[0.07] active:scale-95 border border-white/10 transition-all duration-500 shadow-2xl overflow-hidden"
+          >
+            <div className="absolute top-0 left-0 w-full h-2 bg-[#FFCC00]/50 group-hover:h-4 transition-all"></div>
+            <div className="w-64 h-64 bg-gradient-to-br from-amber-500/20 to-amber-600/5 rounded-[3rem] flex items-center justify-center group-hover:scale-110 transition-transform duration-500 border border-white/5">
+              <i className="fa-solid fa-id-card-clip text-[140px] text-amber-400 group-hover:text-amber-300 drop-shadow-[0_10px_30px_rgba(251,191,36,0.4)]"></i>
             </div>
-          </div>
-        )}
+            <div className="text-center space-y-4">
+              <span className="text-7xl font-black text-white uppercase block tracking-tight">
+                {lang === 'TR' ? 'PERSONEL' : 'STAFF'}
+              </span>
+              <span className="text-2xl text-white/40 font-bold tracking-[0.3em] uppercase group-hover:text-[#FFCC00] transition-colors">
+                {lang === 'TR' ? 'Giriş Yap' : 'Login'}
+              </span>
+            </div>
+          </button>
+        </div>
       </div>
 
-      <div className={`absolute bottom-12 text-center transition-opacity ${role ? 'opacity-20' : 'opacity-60'}`}>
-        <p className={`text-2xl font-black tracking-[0.4em] uppercase ${role ? 'text-[#003366]' : 'text-white'}`}>
-          Üsküdar Üniversitesi
+      {/* Bottom Footer Tip */}
+      <div className="absolute bottom-16 flex flex-col items-center gap-4 animate-bounce opacity-40">
+        <div className="w-10 h-16 rounded-full border-2 border-white/40 flex justify-center p-2">
+            <div className="w-1.5 h-3 bg-white rounded-full"></div>
+        </div>
+        <p className="text-xl text-white font-medium uppercase tracking-[0.4em]">
+          {lang === 'TR' ? 'Dokunmatik Ekran' : 'Touch Screen'}
         </p>
       </div>
     </div>
