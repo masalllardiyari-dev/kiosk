@@ -75,7 +75,8 @@ const App: React.FC = () => {
               onLoad={handleIframeLoad}
               title="Kiosk Portal"
               allow="camera; microphone; display-capture; autoplay; encrypted-media"
-              sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-scripts allow-same-origin"
+              // Sandbox ayarları: allow-top-navigation eklendi, böylece site kendi içinde yönlendirme yapabilir.
+              sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-scripts allow-same-origin allow-top-navigation allow-top-navigation-by-user-activation"
             />
           </main>
         </div>
