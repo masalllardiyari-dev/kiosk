@@ -4,8 +4,11 @@ import { FeedbackData, GeminiResponse } from "../types";
 
 export const processFeedback = async (data: FeedbackData): Promise<GeminiResponse> => {
   try {
-    // Client initialization moved inside for deployment safety
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    // API KEY kontrolü ve güvenli başlatma
+    const apiKey = typeof process !== 'undefined' ? process.env.API_KEY : '';
+    if (!apiKey) throw new Error("API Key not found");
+
+    const ai = new GoogleGenAI({ apiKey });
     
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
@@ -29,10 +32,9 @@ export const processFeedback = async (data: FeedbackData): Promise<GeminiRespons
       }
     });
 
-    const result = JSON.parse(response.text);
-    return result as GeminiResponse;
+    return JSON.parse(response.text || '{}') as GeminiResponse;
   } catch (error) {
-    console.error("Gemini Error:", error);
+    console.error("Gemini Service Error:", error);
     return {
       message: "Geri bildiriminiz için teşekkür ederiz. Görüşleriniz bizim için değerlidir.",
       sentiment: 'neutral'
