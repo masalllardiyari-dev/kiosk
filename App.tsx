@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import FeedbackForm from './components/FeedbackForm';
 import LandingPage from './components/LandingPage';
@@ -16,10 +16,6 @@ const App: React.FC = () => {
     setIsLoading(true);
     setCurrentUrl(url);
     setView(KioskView.MAIN);
-    // Explicitly update iframe src if it already exists
-    if (iframeRef.current) {
-        iframeRef.current.src = url;
-    }
   };
 
   const handleReset = () => {
@@ -34,11 +30,18 @@ const App: React.FC = () => {
   const onFeedbackSuccess = (message: string) => {
     setSuccessMessage(message);
     setView(KioskView.SUCCESS);
-    setTimeout(() => setView(KioskView.MAIN), 6000);
+    setTimeout(() => setView(KioskView.MAIN), 5000);
   };
 
+  // Ensure landing page always fits
+  useEffect(() => {
+    const preventDefault = (e: Event) => e.preventDefault();
+    document.addEventListener('touchmove', preventDefault, { passive: false });
+    return () => document.removeEventListener('touchmove', preventDefault);
+  }, []);
+
   return (
-    <div className="w-screen h-screen flex flex-col overflow-hidden">
+    <div className="w-full h-screen flex flex-col overflow-hidden bg-white select-none">
       {/* Landing Page Layer */}
       {view === KioskView.LANDING && (
         <LandingPage onSelect={handleActionSelection} />
@@ -46,7 +49,7 @@ const App: React.FC = () => {
 
       {/* Main Kiosk Content */}
       {view !== KioskView.LANDING && (
-        <>
+        <div className="flex flex-col w-full h-full">
           <Navbar 
             onReset={handleReset} 
             onOpenFeedback={() => setView(KioskView.FEEDBACK)} 
@@ -59,7 +62,7 @@ const App: React.FC = () => {
                 <div className="w-32 h-32 border-[16px] border-[#003366] border-t-[#FFCC00] rounded-full animate-spin shadow-2xl"></div>
                 <div className="mt-12 text-center space-y-4">
                   <h2 className="text-[#003366] text-4xl font-black uppercase tracking-[0.3em]">Sistem Hazırlanıyor</h2>
-                  <p className="text-gray-400 text-xl font-bold">Lütfen bekleyiniz...</p>
+                  <p className="text-gray-400 text-xl font-bold uppercase tracking-widest">Üsküdar Üniversitesi Teksifre</p>
                 </div>
               </div>
             )}
@@ -67,13 +70,13 @@ const App: React.FC = () => {
             <iframe
               ref={iframeRef}
               src={currentUrl}
-              className="w-full h-full border-none block"
+              className="absolute inset-0 w-full h-full border-none"
               onLoad={handleIframeLoad}
               title="Teksifre Kiosk Frame"
               allow="camera; geolocation; microphone"
             />
           </main>
-        </>
+        </div>
       )}
 
       {/* Overlays */}
@@ -92,18 +95,20 @@ const App: React.FC = () => {
             </div>
             <div className="space-y-4">
               <h3 className="text-5xl font-black text-[#003366]">İşlem Tamamlandı</h3>
-              <p className="text-gray-400 text-2xl font-bold uppercase tracking-widest">Geri bildiriminiz için teşekkürler</p>
+              <p className="text-gray-400 text-2xl font-bold uppercase tracking-widest">Geri bildiriminiz başarıyla iletildi</p>
             </div>
-            <div className="bg-gray-50 p-10 rounded-[2.5rem] border-4 border-dashed border-gray-200">
-              <p className="text-gray-700 italic text-2xl leading-relaxed font-medium">
-                "{successMessage}"
-              </p>
-            </div>
+            {successMessage && (
+              <div className="bg-gray-50 p-10 rounded-[2.5rem] border-4 border-dashed border-gray-200">
+                <p className="text-gray-700 italic text-2xl leading-relaxed font-medium">
+                  "{successMessage}"
+                </p>
+              </div>
+            )}
             <button 
               onClick={() => setView(KioskView.MAIN)}
               className="bg-[#003366] text-white px-12 py-6 rounded-3xl font-black text-2xl w-full active:scale-95 transition-all shadow-2xl hover:bg-[#002244]"
             >
-              Devam Et
+              Kapat
             </button>
           </div>
         </div>

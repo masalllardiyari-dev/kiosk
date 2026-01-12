@@ -20,7 +20,7 @@ const Navbar: React.FC<NavbarProps> = ({ onReset, onOpenFeedback, isIframeLoadin
         <div>
           <h1 className="text-3xl font-black uppercase tracking-tight leading-none mb-1">Üsküdar Üniversitesi</h1>
           <div className="flex items-center gap-3">
-             <span className="w-3 h-3 bg-green-400 rounded-full animate-pulse shadow-[0_0_10px_#4ade80]"></span>
+             <span className="w-3 h-3 bg-green-400 rounded-full animate-pulse shadow-[0_0_100px_#4ade80]"></span>
              <p className="text-lg text-[#FFCC00] font-black tracking-[0.2em] uppercase">Teksifre Kiosk Portalı</p>
           </div>
         </div>
@@ -30,16 +30,16 @@ const Navbar: React.FC<NavbarProps> = ({ onReset, onOpenFeedback, isIframeLoadin
         {isIframeLoading && (
           <div className="mr-8 bg-white/10 px-6 py-3 rounded-2xl flex items-center gap-4">
             <i className="fa-solid fa-circle-notch fa-spin text-[#FFCC00] text-2xl"></i>
-            <span className="text-sm font-black uppercase tracking-widest">Bağlanıyor</span>
+            <span className="text-sm font-black uppercase tracking-widest text-white/80">Sistem Bağlanıyor...</span>
           </div>
         )}
         
         <button 
-          onClick={handleGoBack}
+          onClick={onReset}
           className="flex flex-col items-center justify-center bg-white/10 hover:bg-white/20 active:scale-90 transition-all w-28 h-24 rounded-3xl border-2 border-white/10"
         >
           <i className="fa-solid fa-house-user text-3xl"></i>
-          <span className="text-[11px] mt-2 font-black uppercase tracking-tight">Menü</span>
+          <span className="text-[11px] mt-2 font-black uppercase tracking-tight">Ana Menü</span>
         </button>
 
         <button 
@@ -60,11 +60,6 @@ const Navbar: React.FC<NavbarProps> = ({ onReset, onOpenFeedback, isIframeLoadin
       </div>
     </nav>
   );
-};
-
-// Internal small helper logic for consistency
-const handleGoBack = () => {
-    // This is handled by the parent onReset
 };
 
 export default Navbar;
