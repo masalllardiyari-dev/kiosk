@@ -24,9 +24,19 @@ const App: React.FC = () => {
     setCurrentUrl('https://teksifre.uskudar.edu.tr/');
   };
 
+  const handleGoBack = () => {
+    if (iframeRef.current && iframeRef.current.contentWindow) {
+      try {
+        iframeRef.current.contentWindow.history.back();
+      } catch (e) {
+        // Cross-origin kısıtlaması varsa ana sayfaya dön
+        handleReset();
+      }
+    }
+  };
+
   const handleIframeLoad = () => {
     setIsLoading(false);
-    console.log("Portal loaded.");
   };
 
   const onFeedbackSuccess = (message: string) => {
@@ -53,6 +63,7 @@ const App: React.FC = () => {
         <div className="flex flex-col w-full h-full bg-white">
           <Navbar 
             onReset={handleReset} 
+            onGoBack={handleGoBack}
             onOpenFeedback={() => setView(KioskView.FEEDBACK)} 
             isIframeLoading={isLoading}
           />
@@ -62,8 +73,8 @@ const App: React.FC = () => {
               <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-white">
                 <div className="w-24 h-24 border-[12px] border-slate-100 border-t-[#003366] rounded-full animate-spin"></div>
                 <div className="mt-8 text-center">
-                  <h2 className="text-[#003366] text-3xl font-black uppercase tracking-widest">Sistem Hazırlanıyor</h2>
-                  <p className="text-slate-400 font-bold mt-2 uppercase tracking-tight">Güvenli Bağlantı Kuruluyor...</p>
+                  <h2 className="text-[#003366] text-3xl font-black uppercase tracking-widest">Yükleniyor</h2>
+                  <p className="text-slate-400 font-bold mt-2 uppercase tracking-tight">İşleminiz Hazırlanıyor...</p>
                 </div>
               </div>
             )}
@@ -74,9 +85,8 @@ const App: React.FC = () => {
               className="absolute inset-0 w-full h-full border-none"
               onLoad={handleIframeLoad}
               title="Kiosk Portal"
-              allow="camera; microphone; display-capture; autoplay; encrypted-media"
-              // Sandbox ayarları: allow-top-navigation eklendi, böylece site kendi içinde yönlendirme yapabilir.
-              sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-scripts allow-same-origin allow-top-navigation allow-top-navigation-by-user-activation"
+              // Sandbox kaldırıldı: CSRF/419 hatalarını önlemek ve tüm yönlendirmelere izin vermek için.
+              allow="camera; microphone; display-capture; autoplay; encrypted-media; clipboard-read; clipboard-write"
             />
           </main>
         </div>
@@ -97,14 +107,9 @@ const App: React.FC = () => {
               <i className="fa-solid fa-check"></i>
             </div>
             <div className="space-y-4">
-              <h3 className="text-5xl font-black text-[#003366] tracking-tighter">Bildirim Alındı</h3>
-              <p className="text-slate-400 text-2xl font-bold uppercase tracking-widest">Geri bildiriminiz için teşekkür ederiz.</p>
+              <h3 className="text-5xl font-black text-[#003366] tracking-tighter">İşlem Tamam</h3>
+              <p className="text-slate-400 text-2xl font-bold uppercase tracking-widest">Teşekkür Ederiz</p>
             </div>
-            {successMessage && (
-              <div className="bg-slate-50 p-8 rounded-3xl border-2 border-slate-100 max-h-[200px] overflow-y-auto">
-                <p className="text-slate-600 italic text-xl leading-relaxed">"{successMessage}"</p>
-              </div>
-            )}
             <button 
               onClick={() => setView(KioskView.MAIN)}
               className="bg-[#003366] text-white px-12 py-6 rounded-3xl font-black text-2xl w-full active:scale-95 transition-all shadow-xl"
