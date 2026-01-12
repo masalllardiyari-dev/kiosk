@@ -1,0 +1,7 @@
+{
+  "name": "Üsküdar University Teksifre Kiosk",
+  "description": "A professional kiosk interface for the Üsküdar University password management system, featuring feedback integration and touch-optimized navigation.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
